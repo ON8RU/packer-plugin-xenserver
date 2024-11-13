@@ -8,3 +8,5 @@ builder-*
 dist/*
 vendor/*
 packer-plugin-xenserver
+**/.env.sh
+packer-ubuntu-2004-iso

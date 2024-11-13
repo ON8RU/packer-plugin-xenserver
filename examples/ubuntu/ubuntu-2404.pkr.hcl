@@ -10,7 +10,7 @@ packer {
 # The ubuntu_version value determines what Ubuntu iso URL and sha256 hash we lookup. Updating
 # this will allow a new version to be pulled in.
 data "null" "ubuntu_version" {
-  input = "20.04"
+  input = "24.04"
 }
 
 locals {
@@ -20,7 +20,7 @@ locals {
   # Update this map to support future releases. At this time, the Ubuntu
   # jammy template is not available yet.
   ubuntu_template_name = {
-    20.04 = "Ubuntu Focal Fossa 20.04"
+    24.04 = "Ubuntu Jammy Jellyfish 22.04"
   }
 }
 
@@ -73,7 +73,7 @@ variable "sr_name" {
   description = "The name of the SR to packer will use"
 }
 
-source "xenserver-iso" "ubuntu-2004" {
+source "xenserver-iso" "ubuntu-2404" {
   iso_checksum      = "sha256:${local.ubuntu_sha256[0]}"
   iso_url           = "https://releases.ubuntu.com/${local.ubuntu_version}/ubuntu-${local.ubuntu_version}.${local.ubuntu_url_path[0]}-live-server-amd64.iso"
 
@@ -94,13 +94,13 @@ source "xenserver-iso" "ubuntu-2004" {
   disk_size      = 30720
 
   vm_tags        = [
-    "ubuntu20",
+    "ubuntu24",
     "packer"
   ]
 
   floppy_files = [
-    "examples/http/ubuntu-2004/meta-data",
-    "examples/http/ubuntu-2004/user-data",
+    "examples/http/ubuntu-2404/meta-data",
+    "examples/http/ubuntu-2404/user-data",
   ]
 
   ssh_username            = "testuser"
@@ -108,10 +108,10 @@ source "xenserver-iso" "ubuntu-2004" {
   ssh_wait_timeout        = "60000s"
   ssh_handshake_attempts  = 10000
 
-  output_directory = "packer-ubuntu-2004-iso"
+  output_directory = "packer-ubuntu-2404-iso"
   keep_vm          = "always"
 }
 
 build {
-  sources = ["xenserver-iso.ubuntu-2004"]
+  sources = ["xenserver-iso.ubuntu-2404"]
 }
