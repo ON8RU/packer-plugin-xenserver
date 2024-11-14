@@ -93,15 +93,24 @@ source "xenserver-iso" "ubuntu-2404" {
   vm_memory      = 4096
   disk_size      = 30720
 
+  http_directory = "examples/http/ubuntu-2404"
+
+  boot_wait            = "3s"
+  boot_command         = [
+    "e<wait>",
+    "<down><down><down><end>",
+    " autoinstall ds=\"nocloud-net;s=http://{{.HTTPIP}}:{{.HTTPPort}}/\" ",
+    "<f10>"
+    ]
+
+  net_device = "Pool-wide network associated with eth0"
+
   vm_tags        = [
     "ubuntu24",
     "packer"
   ]
 
-  floppy_files = [
-    "examples/http/ubuntu-2404/meta-data",
-    "examples/http/ubuntu-2404/user-data",
-  ]
+  shutdown_command     = "echo 'packer' | sudo -S shutdown -P now"
 
   ssh_username            = "testuser"
   ssh_password            = "ubuntu"
@@ -109,6 +118,8 @@ source "xenserver-iso" "ubuntu-2404" {
   ssh_handshake_attempts  = 10000
 
   output_directory = "packer-ubuntu-2404-iso"
+
+  # always, never or on_success
   keep_vm          = "always"
 }
 

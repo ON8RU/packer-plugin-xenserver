@@ -74,12 +74,15 @@ variable "sr_name" {
 }
 
 source "xenserver-iso" "ubuntu-2204" {
-  iso_checksum      = "sha256:${local.ubuntu_sha256[0]}"
-  iso_url           = "https://releases.ubuntu.com/${local.ubuntu_version}/ubuntu-${local.ubuntu_version}.${local.ubuntu_url_path[0]}-live-server-amd64.iso"
+  # iso_checksum      = "sha256:${local.ubuntu_sha256[0]}"
+  # iso_url           = "https://releases.ubuntu.com/${local.ubuntu_version}/ubuntu-${local.ubuntu_version}.${local.ubuntu_url_path[0]}-live-server-amd64.iso"
+
+  iso_checksum      = "50718bda70672dd9727251c33d2359ef"
+  iso_url           = "http://192.186.5.55:8181/cloud-ubuntu-22.04.iso"
 
   sr_iso_name    = var.sr_iso_name
   sr_name        = var.sr_name
-  tools_iso_name = "guest-tools.iso"
+  tools_iso_name = ""
 
   remote_host     = var.remote_host
   remote_password = var.remote_password
@@ -93,45 +96,27 @@ source "xenserver-iso" "ubuntu-2204" {
   vm_memory      = 4096
   disk_size      = 30720
 
-  http_directory = "examples/http/ubuntu-2204"
+  # http_directory = "examples/http/ubuntu-2204"
+  # ip_getter = "tools"
 
-  boot_wait = "5m"
-  # boot_wait = "5s"
-  boot_command    = [
-    "<home><up><enter><down><down><down><enter><wait>",
-    "mkdir /root/auto-i<enter>",
-    "touch /root/auto-i/meta-data<enter>",
-    "git clone https://github.com/ON8RU/packer-plugin-xenserver.git /tmp/packer-plugin-xenserver<enter>",
-    "cp /tmp/packer-plugin-xenserver/examples/http/ubuntu-2204/user-data /root/auto-i/user-data",
-    # "linux /casper/vmlinuz autoinstall quiet \"ds=nocloud;s=/root/autoinstall\" ---",
-    # "<enter><wait>",
-    # "initrd /casper/initrd<enter><wait>",
-    # "boot<enter>"
-  ]
+  # boot_wait            = "3s"
+  # boot_command         = [
+  #   "e<wait>",
+  #   "<down><down><down><end>",
+  #   "set gfxpayload=keep",
+  #   "linux /casper/vmlinuz autoinstall quiet ds=\"nocloud-net;seedfrom=http://{{.HTTPIP}}:{{.HTTPPort}}/\" ---<enter>",
+  #   "initrd /casper/initrd<enter>",
+  #   "boot<enter>",
+  #   # "apt-get install -y xe-guest-utilities",
+  #   "<enter><f10><wait>"
+  #   ]
 
-  //https://github.com/ON8RU/packer-plugin-xenserver.git
-
-  # boot_command = [
-  #   "<wait>",
-  #   "c",
-  #   "<wait>",
-  #   "linux /casper/vmlinuz quiet autoinstall \"ds=nocloud;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\" ---",
-  #   "<enter><wait>",
-  #   "initrd /casper/initrd ",
-  #   "<enter><wait>",
-  #   "boot",
-  #   "<enter><wait>",
-  # ]
+  network_names = ["Pool-wide network associated with eth0"]
 
   vm_tags        = [
     "ubuntu22",
     "packer"
   ]
-
-  # floppy_files = [
-  #   "examples/http/ubuntu-2204/meta-data",
-  #   "examples/http/ubuntu-2204/user-data",
-  # ]
 
   ssh_username            = "testuser"
   ssh_password            = "ubuntu"
@@ -139,6 +124,8 @@ source "xenserver-iso" "ubuntu-2204" {
   ssh_handshake_attempts  = 10000
 
   output_directory = "packer-ubuntu-2204-iso"
+
+  # always, never or on_success
   keep_vm          = "always"
 }
 

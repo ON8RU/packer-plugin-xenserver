@@ -109,6 +109,8 @@ source "xenserver-iso" "ubuntu-2004" {
   ssh_handshake_attempts  = 10000
 
   output_directory = "packer-ubuntu-2004-iso"
+
+  # always, never or on_success
   keep_vm          = "always"
 }
 
