@@ -79,7 +79,7 @@ source "xenserver-iso" "ubuntu-2404" {
 
   sr_iso_name    = var.sr_iso_name
   sr_name        = var.sr_name
-  tools_iso_name = "guest-tools.iso"
+  # tools_iso_name = ""
 
   remote_host     = var.remote_host
   remote_password = var.remote_password
@@ -98,19 +98,17 @@ source "xenserver-iso" "ubuntu-2404" {
   boot_wait            = "3s"
   boot_command         = [
     "e<wait>",
-    "<down><down><down><end>",
-    " autoinstall ds=\"nocloud-net;s=http://{{.HTTPIP}}:{{.HTTPPort}}/\" ",
+    "<down><down><down><end><left><left><left>",
+    " quiet autoinstall \"ds=nocloud-net;s=http://{{.HTTPIP}}:{{.HTTPPort}}/\" ",
     "<f10>"
-    ]
+  ]
 
-  net_device = "Pool-wide network associated with eth0"
+  network_names = ["Pool-wide network associated with eth0"]
 
   vm_tags        = [
     "ubuntu24",
     "packer"
   ]
-
-  shutdown_command     = "echo 'packer' | sudo -S shutdown -P now"
 
   ssh_username            = "testuser"
   ssh_password            = "ubuntu"
